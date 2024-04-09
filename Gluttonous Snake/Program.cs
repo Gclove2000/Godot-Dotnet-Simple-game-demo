@@ -35,6 +35,13 @@ namespace Gluttonous_Snake
             builder.AddSingleton<NlogHelper>();
             builder.AddSingleton<MainSceneModel>();
             builder.AddSingleton<FreeSqlHelper>();
+            builder.AddSingleton<SettingHelper>();
+
+
+
+            builder.AddSingleton<GameSceneModel>();
+            builder.AddSingleton<SettingSceneModel>();
+            builder.AddSingleton<MessageSceneModel>();
         }
         /// <summary>
         /// 添加SceneModel，应以Transient添加

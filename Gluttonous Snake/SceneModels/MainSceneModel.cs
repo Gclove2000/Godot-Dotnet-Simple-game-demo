@@ -1,5 +1,7 @@
 ﻿using Gluttonous_Snake.DB;
+using Gluttonous_Snake.SceneScripts;
 using Gluttonous_Snake.Utils;
+using Godot;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,10 +17,19 @@ namespace Gluttonous_Snake.SceneModels
 
         private FreeSqlHelper freeSqlHelper;
 
-        public MainSceneModel(PrintHelper printHelper, FreeSqlHelper freeSqlHelper)
+        private SettingHelper settingHelper;
+        
+        private SettingScene settingScene;
+
+        private GameScene gameScene;
+
+        
+
+        public MainSceneModel(PrintHelper printHelper, FreeSqlHelper freeSqlHelper,SettingHelper settingHelper)
         {
             this.printHelper = printHelper;
             this.freeSqlHelper = freeSqlHelper;
+            this.settingHelper = settingHelper;
         }
 
         public override void Process(double delta)
@@ -29,20 +40,9 @@ namespace Gluttonous_Snake.SceneModels
         public override void Ready()
         {
             printHelper.Info("主函数加载成功！");
-            printHelper.Debug("插入数据库测试");
-            var lists = T_User.Faker.Generate(10);
-            var num = freeSqlHelper.SqliteDb.Insert(lists).ExecuteAffrows();
-            printHelper.Debug($"影响{num}行数据");
-
-            var list = freeSqlHelper.SqliteDb.Queryable<T_User>()
-                .OrderByDescending(x => x.Id)
-                .Take(10)
-                .ToList();
-            printHelper.Debug($"查询数据库");
-            foreach (var item in list)
-            {
-                printHelper.Debug(JsonConvert.SerializeObject(item));
-            }
+            settingScene = Scene.GetNode<SettingScene>("Setting");
+            settingScene.Position =new Vector2(settingHelper.WindowWidth/2, settingHelper.WindowHeight/2);
+            gameScene = Scene.GetNode<GameScene>("Game");
         }
     }
 }
